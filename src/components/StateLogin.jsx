@@ -5,7 +5,12 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [didEdit, setDiEdit] = useState({
+    email: false,
+    password: false,
+  });
 
+  const emailIsInavlid = didEdit.email && !enteredValues.email.includes("@");
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(enteredValues);
@@ -15,6 +20,17 @@ const Login = () => {
     setEnteredValue((preValues) => ({
       ...preValues,
       [identifier]: value,
+    }));
+    setDiEdit((preEdit) => ({
+      ...preEdit,
+      [identifier]: false,
+    }));
+  };
+
+  const handleEmailBlur = (identifier) => {
+    setDiEdit((preEdit) => ({
+      ...preEdit,
+      [identifier]: true,
     }));
   };
 
@@ -29,9 +45,13 @@ const Login = () => {
             id="email"
             type="email"
             name="email"
+            onBlur={() => handleEmailBlur("email")}
             onChange={(event) => handleInputChange("email", event.target.value)}
             value={enteredValues.email}
           />
+          <div className="control-error">
+            {emailIsInavlid && <p>Please enter a Valid email address </p>}
+          </div>
         </div>
 
         <div className="control no-margin">
